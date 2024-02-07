@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function register() : string {
+    public function register(Request $request) : string {
+        
         return "HI";
     }
 }
