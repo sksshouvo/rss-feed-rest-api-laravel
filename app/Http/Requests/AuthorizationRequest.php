@@ -19,7 +19,6 @@ class AuthorizationRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-
      public function register() : array {
         return [
             'name' => ['required', 'not_regex:/^.+@.+$/i'],
@@ -41,4 +40,5 @@ class AuthorizationRequest extends FormRequest
     //         $this->register(),
     //     );
     // }
+
 }
