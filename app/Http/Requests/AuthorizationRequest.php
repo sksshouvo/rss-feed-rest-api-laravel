@@ -11,7 +11,7 @@ class AuthorizationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -19,12 +19,26 @@ class AuthorizationRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
-    {
+     public function register() : array {
         return [
-            'name' => ['required', 'regex:/^[A-Za-z]{4}\d{4}$'],
-            'email' => ['required', 'email_address', 'unique:User'],
+            'name' => ['required', 'not_regex:/^.+@.+$/i'],
+            'email' => ['required', 'email', 'unique:users'],
             'password' => ['required', 'confirmed'],
         ];
-    }
+     }
+
+     public function login() : array {
+        return [
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ];
+     }
+
+    // public function rules(): array
+    // {
+    //     return array_merge(
+    //         $this->register(),
+    //     );
+    // }
+
 }
