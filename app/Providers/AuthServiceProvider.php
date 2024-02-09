@@ -30,4 +30,5 @@ class AuthServiceProvider extends ServiceProvider
             "user" => "Salman"
         ]);
     }
+    
 }
