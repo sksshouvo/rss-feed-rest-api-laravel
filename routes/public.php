@@ -18,5 +18,4 @@ use App\Http\Controllers\Authentication\UserController;
 Route::group(['prefix' => 'authenticaion'], function() {
     Route::post('register', [UserController::class, 'register'])->name('user.register');
     Route::post('login', [UserController::class, 'login'])->name('user.login');
-    Route::get('test', [UserController::class, 'test'])->name('user.test')->middleware(['auth:api']);
 });

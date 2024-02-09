@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Authentication\UserController;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | PRIVATE API Routes
@@ -13,3 +13,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api/private" middleware group. Make something great!
 |
 */
+
+Route::middleware(['auth:api'])->group(function () {
+    Route::get('test', [UserController::class, 'test'])->name('user.test');
+});
+
