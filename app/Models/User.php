@@ -45,12 +45,12 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function registerUser(string $name, string $email, string $password) : JsonResponse {
-        $user = new $this;
+    public function registerUser(string $name, string $email, string $password) : mixed {
+        $user = new self;
         $user->name = $name;
         $user->email = $email;
         $user->password = Hash::make($password);
         $user->save();
-        return response()->json($user);
+        return $user;
     }
 }

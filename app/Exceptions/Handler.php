@@ -39,7 +39,8 @@ class Handler extends ExceptionHandler
                     'success' => false, 
                     'errors' => $exception->errors(),
                     'token' => $request->bearerToken(),
-                    'data' => []
+                    'data' => [],
+                    'message' => 'Validation Failed'
                 ], 
                     JsonResponse::HTTP_UNPROCESSABLE_ENTITY
                 );
