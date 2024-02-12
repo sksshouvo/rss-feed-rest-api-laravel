@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\RssFeed;
 
+use App\Http\Requests\RssFeedFormRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\RssFeed;
@@ -19,9 +20,11 @@ class RssFeedController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RssFeedFormRequest $request)
     {
-        //
+        $request->validate($request->store());
+
+        return $request->user();
     }
 
     /**
