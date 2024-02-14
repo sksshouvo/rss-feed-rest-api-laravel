@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RssFeedFormRequest extends FormRequest
 {
@@ -23,8 +24,14 @@ class RssFeedFormRequest extends FormRequest
     public function store() : array {
         return [
             "title" => ["required", "string"],
-            "link" => ["required", "url:http,https"],
-            "published_at" =>  ["required", "date_format:Y-m-d H:i:s"]
+            "link" => [
+                "required",
+                "url:http,https",
+                Rule::unique('rss_feeds')->where(function ($query) {
+                    return $query->where('created_by', auth()->id());
+                })
+            ],
+            "published_at" => ["required", "date_format:Y-m-d H:i:s"]
         ];
     }
 
