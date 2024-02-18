@@ -9,7 +9,7 @@ class RssFeedDetail extends Model
 {
     use HasFactory;
     
-    public function storeRssFeed(string $rssFeedLink, int $refreshInterval, string $intervalType, string $sessionstartedAt): mixed {
+    public function storeRssFeed(string $rssFeedLink, int $refreshInterval, string $intervalType, string $sessionstartedAt): storeRssFeed {
         $rssFeed = new $this;
         $rssFeed->rss_feed_link = $rssFeedLink;
         $rssFeed->refresh_interval = $refreshInterval;
