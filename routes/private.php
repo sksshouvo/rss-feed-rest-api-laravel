@@ -17,6 +17,14 @@ use Illuminate\Http\Request;
 
 Route::middleware(['auth:api'])->group(function () {
     Route::get('test', [UserController::class, 'test'])->name('user.test');
-    Route::resource('rss-feed', RssFeedController::class);
+    
+    Route::group(['prefix' => 'rss-feed'], function() {
+        Route::post('start', [RssFeedController::class, 'start'])->name('fetch.start');
+        Route::post('re-fetch', [RssFeedController::class, 'refetch'])->name('fetch.refetch');
+        Route::post('stop', [RssFeedController::class, 'stop'])->name('fetch.stop');
+        Route::post('clear', [RssFeedController::class, 'clear'])->name('fetch.clear');
+    });
+    
+    
 });
 

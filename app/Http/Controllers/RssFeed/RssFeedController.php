@@ -26,7 +26,7 @@ class RssFeedController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(RssFeedFormRequest $request)
+    public function start(RssFeedFormRequest $request)
     {
         $request->validate($request->start());
 
@@ -50,31 +50,6 @@ class RssFeedController extends Controller
 
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function bulkStore(RssFeedFormRequest $request)
-    {
-        $request->validate($request->store());
-
-        $title = $request->input('title');
-        $link = $request->input('link');
-        $publishedAt = $request->input('published_at');
-        try {
-            
-            DB::beginTransaction();
-            $rssFeed = $this->rss_feed->storeRssFeed(title: $title,link: $link,publishedAt: $publishedAt);
-            DB::commit();
-            return successResponse($request->bearerToken(), $rssFeed, __('rss_feed.store'), 201);
-
-        } catch (\Exception $e) {
-
-            DB::rollback();
-            Log::info($e);
-            return errorResponse($e, __('common.error'), 500);
-        }
-
-    }
 
     /**
      * Display the specified resource.
