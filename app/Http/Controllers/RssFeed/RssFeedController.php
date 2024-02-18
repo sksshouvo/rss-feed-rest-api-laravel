@@ -28,13 +28,14 @@ class RssFeedController extends Controller
      */
     public function store(RssFeedFormRequest $request)
     {
-        $request->validate($request->store());
+        $request->validate($request->start());
 
-        $title = $request->input('title');
-        $link = $request->input('link');
-        $publishedAt = $request->input('published_at');
+        $rssFeedLink      = $request->input('rss_feed_link');
+        $refreshInterval  = $request->input('refresh_interval');
+        $intervalType     = $request->input('interval_type');
+        $sessionStartedAt = $request->input('session_started_at');
+
         try {
-            
             DB::beginTransaction();
             $rssFeed = $this->rss_feed->storeRssFeed(title: $title,link: $link,publishedAt: $publishedAt);
             DB::commit();

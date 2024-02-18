@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Authentication\UserController;
 use App\Http\Controllers\RssFeed\RssFeedController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ use Illuminate\Http\Request;
 */
 
 Route::middleware(['auth:api'])->group(function () {
+    Route::get('test', [UserController::class, 'test'])->name('user.test');
     Route::resource('rss-feed', RssFeedController::class);
 });
 
