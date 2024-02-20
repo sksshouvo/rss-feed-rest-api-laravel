@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\RssFeed;
 
 use App\Http\Requests\RssFeedFormRequest;
+use App\Http\Resources\RssFeedResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\RssFeed;
@@ -39,12 +40,11 @@ class RssFeedController extends Controller
         try {
             DB::beginTransaction();
             $rssFeed = $this->rss_feed->storeFeed(rssFeedLink: $rssFeedLink, refreshInterval: $refreshInterval, intervalType: $intervalType, sessionStartedAt: $sessionStartedAt);
-            $rssFeed->rssFeedDetails()->createMany([$rssFeedDetails]);
+            $rssFeed->rssFeedDetails()->createMany($rssFeedDetails);
             DB::commit();
-            return successResponse($request->bearerToken(), $rssFeed, __('rss_feed.store'), 201);
+            return successResponse($request->bearerToken(), new RssFeedResource($rssFeed), __('rss_feed.store'), 201);
 
         } catch (\Exception $e) {
-
             DB::rollback();
             Log::info($e);
             return errorResponse($e, __('common.error'), 500);

@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class RssFeedDetail extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'rss_feed_id',
+        'title',
+        'link',
+        'published_at'
+    ];
     
     public function storeRssFeed(string $rssFeedLink, int $refreshInterval, string $intervalType, string $sessionstartedAt): storeRssFeed {
         $rssFeed = new $this;

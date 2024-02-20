@@ -192,7 +192,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{   \r\n    \"rss_feed_link\": \"https://test.com\",\r\n    \"refresh_interval\" : 1,\r\n    \"interval_type\": \"salman\",\r\n    \"session_started_at\": \"2024-02-01 00:00:01\",\r\n    \"session_ended_at\": \"2024-02-03 00:00:01\",\r\n    \"rss_feed_details\": [\r\n        {\r\n            \"title\": \"Test is going on\",\r\n            \"link\": \"https://test1.com\",\r\n            \"published_at\": \"2024-02-18\"\r\n        },\r\n        {\r\n            \"title\": \"\",\r\n            \"link\": \"https://test1.com\",\r\n            \"published_at\": \"2024-02-18\"\r\n        }\r\n    ]\r\n}",
+							"raw": "{   \r\n    \"rss_feed_link\": \"https://test.com\",\r\n    \"refresh_interval\" : 1,\r\n    \"interval_type\": \"minutes\",\r\n    \"session_started_at\": \"2024-02-01 00:00:01\",\r\n    \"session_ended_at\": \"2024-02-03 00:00:01\",\r\n    \"rss_feed_details\": [\r\n        {\r\n            \"title\": \"Test is going on\",\r\n            \"link\": \"https://test1.com\",\r\n            \"published_at\": \"2024-02-18 00:00:01\"\r\n        },\r\n        {\r\n            \"title\": \"Test\",\r\n            \"link\": \"https://test1.com\",\r\n            \"published_at\": \"2024-02-18 00:00:01\"\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -200,14 +200,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{localhost}}/api/private/rss-feed",
+							"raw": "{{localhost}}/api/private/rss-feed/start",
 							"host": [
 								"{{localhost}}"
 							],
 							"path": [
 								"api",
 								"private",
-								"rss-feed"
+								"rss-feed",
+								"start"
 							]
 						}
 					},
