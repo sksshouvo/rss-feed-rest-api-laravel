@@ -26,19 +26,13 @@ class RssFeedFormRequest extends FormRequest
     public function start() : array {
         //TODO::Need to start working here
         return [
-            "rss_feed_link"      => ["required", "url"],
-            "refresh_interval"   => ["required", "numeric"],
-            "interval_type"      => ["required", Rule::enum(RssFeedIntervalType::class)],
-            "session_started_at" => ["required", "date_format:Y-m-d H:i:s"],
-            "rss_feed_details"   => ["required", "array"],
-            "rss_feed_details.*.title" => ["required", "string"],
-            "rss_feed_details.*.link" => [
-                "required",
-                "url:http,https",
-                Rule::unique('rss_feed_details')->where(function ($query) {
-                    return $query->where('created_by', auth()->id());
-                })
-            ],
+            "rss_feed_link"                   => ["required", "url"],
+            "refresh_interval"                => ["required", "numeric"],
+            "interval_type"                   => ["required", Rule::enum(RssFeedIntervalType::class)],
+            "session_started_at"              => ["required", "date_format:Y-m-d H:i:s"],
+            "rss_feed_details"                => ["required", "array"],
+            "rss_feed_details.*.title"        => ["required", "string"],
+            "rss_feed_details.*.link"         => [ "required", "url:http,https"],
             "rss_feed_details.*.published_at" => ["required", "date_format:Y-m-d H:i:s"]
         ];
     }
