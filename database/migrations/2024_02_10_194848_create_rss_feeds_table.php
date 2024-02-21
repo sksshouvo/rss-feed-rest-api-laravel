@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string("title")->nullable();
             $table->text("link")->nullable();
             $table->datetime("published_at")->nullable();
+            $table->enum("status", ['old', 'new'])->default('new');
             $table->timestamps();
             $table->foreign('rss_feed_id')->references('id')->on('rss_feeds')->constrained()->onUpdate('cascade')->onDelete('cascade');
         });

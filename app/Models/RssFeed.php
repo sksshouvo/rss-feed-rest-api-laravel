@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 use Carbon\Carbon;
+use Auth;
+use Log;
 
 class RssFeed extends Model
 {
     use HasFactory, Userstamps;
-
+    protected $fillable = ["rss_feed_link", "created_by"];
     protected function CreatedAt(): Attribute
     {
         return Attribute::make(
@@ -33,7 +35,18 @@ class RssFeed extends Model
     }
 
     public function storeFeed(string $rssFeedLink, int $refreshInterval, string $intervalType, string $sessionStartedAt) : mixed {
-        $rssFeed = $this;
+
+        $rssFeed = $this::where(
+            [
+                ['rss_feed_link', $rssFeedLink],
+                ['created_by', Auth::id()]
+            ]
+        )->first();
+        Log::info($rssFeed);
+        if (!$rssFeed) {
+            $rssFeed = new $this;
+        }
+
         $rssFeed->rss_feed_link = $rssFeedLink;
         $rssFeed->refresh_interval = $refreshInterval;
         $rssFeed->interval_type = $intervalType;
