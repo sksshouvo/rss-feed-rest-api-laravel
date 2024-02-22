@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\RssFeed;
 
 use App\Http\Requests\RssFeedFormRequest;
+use App\Http\Resources\RssFeedResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\RssFeedDetail;
 use App\Models\RssFeed;
 use Log;
 use DB;
@@ -14,6 +16,7 @@ class RssFeedController extends Controller
 
     public function __construct() {
         $this->rss_feed = new RssFeed;
+        $this->rss_feed_detail = new RssFeedDetail;
     }
     /**
      * Display a listing of the resource.
@@ -39,14 +42,13 @@ class RssFeedController extends Controller
         try {
             DB::beginTransaction();
             $rssFeed = $this->rss_feed->storeFeed(rssFeedLink: $rssFeedLink, refreshInterval: $refreshInterval, intervalType: $intervalType, sessionStartedAt: $sessionStartedAt);
-            $rssFeed->rssFeedDetails()->createMany([$rssFeedDetails]);
+            $rssFeedDetail = $this->rss_feed_detail->storeRssFeedDetail(rssFeedId: $rssFeed->id, rssFeedDetails: $rssFeedDetails);
             DB::commit();
-            return successResponse($request->bearerToken(), $rssFeed, __('rss_feed.store'), 201);
+            return successResponse($request->bearerToken(), new RssFeedResource($rssFeed), __('rss_feed.store'), 201);
 
         } catch (\Exception $e) {
-
             DB::rollback();
-            Log::info($e);
+            Log::emergency($e);
             return errorResponse($e, __('common.error'), 500);
         }
 

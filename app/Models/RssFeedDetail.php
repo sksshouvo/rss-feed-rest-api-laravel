@@ -4,18 +4,52 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Log;
 
 class RssFeedDetail extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'rss_feed_id',
+        'title',
+        'link',
+        'published_at'
+    ];
     
-    public function storeRssFeed(string $rssFeedLink, int $refreshInterval, string $intervalType, string $sessionstartedAt): storeRssFeed {
-        $rssFeed = new $this;
-        $rssFeed->rss_feed_link = $rssFeedLink;
-        $rssFeed->refresh_interval = $refreshInterval;
-        $rssFeed->interval_type = $intervalType;
-        $rssFeed->session_started_at = $sessionstartedAt;
-        $rssFeed->save();
-        return $rssFeed;
+    public function storeRssFeedDetail(int $rssFeedId, array $rssFeedDetails): mixed {
+        
+        if (count($rssFeedDetails)) {
+
+            foreach ($rssFeedDetails as $key => $data) {
+                
+                $rssFeedDetail = $this::where([
+                    ['rss_feed_id', $rssFeedId],
+                    ['link', $data['link']]
+                    ])->first();
+
+                if ($rssFeedDetail) {
+                    $rssFeedDetail->status = "old";                    
+                    $rssFeedDetail->rss_feed_id  = $rssFeedId;
+                    $rssFeedDetail->title        = $data['title'];
+                    $rssFeedDetail->link         = $data['link'];
+                    $rssFeedDetail->published_at = $data['published_at'];
+                    $rssFeedDetail->save();
+                } else {
+                    $rssFeedDetail = new $this;
+                    $rssFeedDetail->status = "new";
+                    $rssFeedDetail->rss_feed_id  = $rssFeedId;
+                    $rssFeedDetail->title        = $data['title'];
+                    $rssFeedDetail->link         = $data['link'];
+                    $rssFeedDetail->published_at = $data['published_at'];
+                    $rssFeedDetail->save();
+                }
+
+            }
+        }
+
+        return true;
+
     }
+
 }

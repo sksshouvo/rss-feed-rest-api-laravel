@@ -24,7 +24,7 @@ class RssFeedFormRequest extends FormRequest
     }
 
     public function start() : array {
-        //TODO::Need to start working here
+
         return [
             "rss_feed_link"                   => ["required", "url"],
             "refresh_interval"                => ["required", "numeric"],
