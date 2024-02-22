@@ -42,7 +42,7 @@ class RssFeed extends Model
                 ['created_by', Auth::id()]
             ]
         )->first();
-        Log::info($rssFeed);
+        
         if (!$rssFeed) {
             $rssFeed = new $this;
         }

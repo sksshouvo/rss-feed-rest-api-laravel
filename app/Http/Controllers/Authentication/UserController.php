@@ -29,7 +29,7 @@ class UserController extends Controller
             return successResponse($token, new UserResource($res), __('auth.register'), 201);
         } catch (\Exception $e) {
             DB::rollback();
-            Log::info($e);
+            Log::emergency($e);
             return errorResponse($e, __('common.error'), 500);
         }
         
