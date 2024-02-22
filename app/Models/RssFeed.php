@@ -27,12 +27,12 @@ class RssFeed extends Model
         );
     }
 
-    protected function SessionStartedAt(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value) => Carbon::parse($value)->diffForHumans(),
-        );
-    }
+    // protected function SessionStartedAt(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn (string $value) => Carbon::parse($value)->diffForHumans(),
+    //     );
+    // }
 
     public function storeFeed(string $rssFeedLink, int $refreshInterval, string $intervalType, string $sessionStartedAt) : mixed {
 
@@ -51,6 +51,20 @@ class RssFeed extends Model
         $rssFeed->refresh_interval = $refreshInterval;
         $rssFeed->interval_type = $intervalType;
         $rssFeed->session_started_at = $sessionStartedAt;
+        $rssFeed->save();
+        return $rssFeed;
+    }
+
+    
+    public function stopFeed(string $rssFeedLink, string $sessionEndedAt) : mixed {
+        $rssFeed = $this::where(
+            [
+                ['rss_feed_link', $rssFeedLink],
+                ['created_by', Auth::id()]
+            ]
+        )->first();
+
+        $rssFeed->session_ended_at = $sessionEndedAt;
         $rssFeed->save();
         return $rssFeed;
     }

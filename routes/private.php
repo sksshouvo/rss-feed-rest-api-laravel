@@ -22,7 +22,7 @@ Route::middleware(['auth:api'])->group(function () {
         Route::post('list', [RssFeedController::class, 'index'])->name('fetch.list');
         Route::post('start', [RssFeedController::class, 'start'])->name('fetch.start');
         Route::post('re-fetch', [RssFeedController::class, 'refetch'])->name('fetch.refetch');
-        Route::post('stop', [RssFeedController::class, 'stop'])->name('fetch.stop');
+        Route::put('stop', [RssFeedController::class, 'stop'])->name('fetch.stop');
         Route::post('clear', [RssFeedController::class, 'clear'])->name('fetch.clear');
     });
     

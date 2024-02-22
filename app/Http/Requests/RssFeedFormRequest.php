@@ -40,17 +40,7 @@ class RssFeedFormRequest extends FormRequest
     public function stop() : array {
         return [
             "rss_feed_link"      => ["required", "url"],
-            "refresh_interval"   => ["required", "numeric"],
-            "interval_type"      => ["required", new Enum(RssFeedIntervalType::class)],
-            "session_started_at" => ["required", "date_format:Y-m-d H:i:s"],
-            "session_ended_at"   => ["required", "date_format:Y-m-d H:i:s"],
-            "rss_feed_details"   => ["required", "array"],
-            "rss_feed_details.*.title" => ["required", "string"],
-            "rss_feed_details.*.link" => [
-                "required",
-                "url:http,https"
-            ],
-            "rss_feed_details.*.published_at" => ["required", "date_format:Y-m-d H:i:s"]
+            "session_ended_at"   => ["required", "date_format:Y-m-d H:i:s"]
         ];
     }
 

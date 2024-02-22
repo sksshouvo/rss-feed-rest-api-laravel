@@ -74,8 +74,23 @@ class RssFeedController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function stop(RssFeedFormRequest $request)
     {
-        return "destroy";
+        $request->validate($request->stop());
+        $rssFeedLink = $request->input('rss_feed_link', NULL);
+        $sessionEndedAt = $request->input('session_ended_at', NULL);
+
+        try {
+            DB::beginTransaction();
+            $stoppedRssFeed = $this->rss_feed->stopFeed(rssFeedLink: $rssFeedLink, sessionEndedAt: $sessionEndedAt);
+            DB::commit();
+            Log::info($stoppedRssFeed);
+            return successResponse($request->bearerToken(), new RssFeedResource($stoppedRssFeed), __('rss_feed.stopped'), 201);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::emergency($e);
+            return errorResponse($e, __('common.error'), 500);
+        }
     }
 }
