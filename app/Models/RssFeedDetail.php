@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Wildside\Userstamps\Userstamps;
+use Auth;
 use Log;
 
 class RssFeedDetail extends Model
 {
-    use HasFactory;
+    use HasFactory, Userstamps;
 
     protected $fillable = [
         'rss_feed_id',
@@ -25,7 +27,8 @@ class RssFeedDetail extends Model
                 
                 $rssFeedDetail = $this::where([
                     ['rss_feed_id', $rssFeedId],
-                    ['link', $data['link']]
+                    ['link', $data['link']],
+                    ['created_by', Auth::id()],
                     ])->first();
 
                 if ($rssFeedDetail) {

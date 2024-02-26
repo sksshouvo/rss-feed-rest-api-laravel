@@ -15,6 +15,7 @@ class RssFeedResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'rss_feed_id'        => $this->id,
             'rss_feed_link'      => $this->rss_feed_link,
             'refresh_interval'   => $this->refresh_interval,
             'interval_type'      => $this->interval_type,

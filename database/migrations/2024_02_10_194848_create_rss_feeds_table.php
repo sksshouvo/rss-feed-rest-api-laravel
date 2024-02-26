@@ -31,6 +31,8 @@ return new class extends Migration
             $table->datetime("published_at")->nullable();
             $table->enum("status", ['old', 'new'])->default('new');
             $table->timestamps();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->foreign('rss_feed_id')->references('id')->on('rss_feeds')->constrained()->onUpdate('cascade')->onDelete('cascade');
         });
     }

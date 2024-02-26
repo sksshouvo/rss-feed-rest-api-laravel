@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "4d396b8e-6d39-46c8-a64a-a4d6ee141264",
 		"name": "RssFeedFetcher",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "5540193",
 		"_collection_link": "https://pulse-tech-ltd.postman.co/workspace/Core-Api~41748400-6f61-4739-a0b3-29b9292ef262/collection/5540193-4d396b8e-6d39-46c8-a64a-a4d6ee141264?action=share&source=collection_link&creator=5540193"
 	},
@@ -19,6 +19,7 @@
 								"exec": [
 									"var responseJson = pm.response.json();\r",
 									"\tpm.globals.set('token', responseJson.token);\r",
+									"\tpm.globals.set('userId', responseJson.id);\r",
 									""
 								],
 								"type": "text/javascript"
@@ -36,14 +37,25 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"sksshouvo2@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
+							"raw": "{\r\n    \"email\": \"arafat@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "{{localhost}}/api/public/authenticaion/login"
+						"url": {
+							"raw": "{{localhost}}/api/public/authenticaion/login",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"public",
+								"authenticaion",
+								"login"
+							]
+						}
 					},
 					"response": []
 				},
@@ -65,9 +77,13 @@
 					"request": {
 						"auth": {
 							"type": "oauth2",
-							"oauth2": {
-								"addTokenTo": "header"
-							}
+							"oauth2": [
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
 						},
 						"method": "POST",
 						"header": [
@@ -79,14 +95,25 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Salman Kabir\",\r\n    \"email\": \"sksshouvo2@gmail.com\",\r\n    \"password\": \"1234\",\r\n    \"password_confirmation\": \"1234\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Arafat\",\r\n    \"email\": \"arafat@gmail.com\",\r\n    \"password\": \"1234\",\r\n    \"password_confirmation\": \"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "{{localhost}}/api/public/authenticaion/register"
+						"url": {
+							"raw": "{{localhost}}/api/public/authenticaion/register",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"public",
+								"authenticaion",
+								"register"
+							]
+						}
 					},
 					"response": []
 				}
@@ -96,14 +123,16 @@
 			"name": "RssFeeds",
 			"item": [
 				{
-					"name": "testAuth",
+					"name": "start",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
 									"var responseJson = pm.response.json();\r",
-									"\tpm.globals.set('token', responseJson.access_token);\r",
+									"\tpm.globals.set('token', responseJson.token);\r",
+									"\tpm.globals.set('userId', responseJson.id);\r",
+									"\tpm.globals.set('rssFeedId', responseJson.data.rss_feed_id);\r",
 									""
 								],
 								"type": "text/javascript"
@@ -113,30 +142,13 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": {
-								"token": "{{token}}"
-							}
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": "{{localhost}}/api/private/test"
-					},
-					"response": []
-				},
-				{
-					"name": "start",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "{{token}}"
-							}
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
 						},
 						"method": "POST",
 						"header": [
@@ -148,14 +160,25 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{   \r\n    \"rss_feed_link\": \"https://test.com\",\r\n    \"refresh_interval\" : 1,\r\n    \"interval_type\": \"minutes\",\r\n    \"session_started_at\": \"2024-02-01 00:00:01\",\r\n    \"session_ended_at\": \"2024-02-03 00:00:01\",\r\n    \"rss_feed_details\": [\r\n        {\r\n            \"title\": \"Test is going on\",\r\n            \"link\": \"https://test1.com\",\r\n            \"published_at\": \"2024-02-18 00:00:01\"\r\n        },\r\n        {\r\n            \"title\": \"Test\",\r\n            \"link\": \"https://test12.com\",\r\n            \"published_at\": \"2024-02-18 00:00:01\"\r\n        },\r\n        {\r\n            \"title\": \"Test is going on\",\r\n            \"link\": \"https://test13.com\",\r\n            \"published_at\": \"2024-02-18 00:00:01\"\r\n        },\r\n        {\r\n            \"title\": \"Test is going on\",\r\n            \"link\": \"https://test14.com\",\r\n            \"published_at\": \"2024-02-18 00:00:01\"\r\n        }\r\n    ]\r\n}",
+							"raw": "{   \r\n    \"rss_feed_link\": \"https://test123.com\",\r\n    \"refresh_interval\" : 1,\r\n    \"interval_type\": \"minutes\",\r\n    \"session_started_at\": \"2024-02-01 00:00:01\",\r\n    \"session_ended_at\": \"2024-02-03 00:00:01\",\r\n    \"rss_feed_details\": [\r\n        {\r\n            \"title\": \"Test is going on\",\r\n            \"link\": \"https://test1.com\",\r\n            \"published_at\": \"2024-02-18 00:00:01\"\r\n        },\r\n        {\r\n            \"title\": \"Test\",\r\n            \"link\": \"https://test12.com\",\r\n            \"published_at\": \"2024-02-18 00:00:01\"\r\n        },\r\n        {\r\n            \"title\": \"Test is going on\",\r\n            \"link\": \"https://test13.com\",\r\n            \"published_at\": \"2024-02-18 00:00:01\"\r\n        },\r\n        {\r\n            \"title\": \"Test is going on\",\r\n            \"link\": \"https://test14.com\",\r\n            \"published_at\": \"2024-02-18 00:00:01\"\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "{{localhost}}/api/private/rss-feed/start"
+						"url": {
+							"raw": "{{localhost}}/api/private/rss-feed/start",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"private",
+								"rss-feed",
+								"start"
+							]
+						}
 					},
 					"response": []
 				},
@@ -164,9 +187,13 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": {
-								"token": "{{token}}"
-							}
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
 						},
 						"method": "PUT",
 						"header": [
@@ -178,60 +205,40 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{   \r\n    \"rss_feed_link\": \"https://test.com\",\r\n    \"session_ended_at\": \"2024-02-03 00:00:01\"\r\n}",
+							"raw": "{   \r\n    \"session_ended_at\": \"2024-02-03 00:00:01\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "{{localhost}}/api/private/rss-feed/stop"
+						"url": {
+							"raw": "{{localhost}}/api/private/rss-feed/stop",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"private",
+								"rss-feed",
+								"stop"
+							]
+						}
 					},
 					"response": []
 				},
 				{
-					"name": "index",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": "{{localhost}}/api/private/rss-feed"
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "testClient",
-			"item": [
-				{
-					"name": "test-client",
+					"name": "Refetch",
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": {
-								"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMDIyMDczZGJkOTJhYmZiOGEzM2ZlNjFlMTBlMGM5ZjMxMTBhZTYzYzc1OWI3ZWUwNDlmODUzZjkwNDRlNzg1NzAwMGMwYWRmYmZhNWYwNDIiLCJpYXQiOjE3MDc0MjA5MTIuOTQ5NzE1LCJuYmYiOjE3MDc0MjA5MTIuOTQ5NzE3LCJleHAiOjE3MzkwNDMzMTIuOTM1NzcxLCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.O9Lw3wN-G0o2oyQK5IUh60lSSY7Ar5uAG03Oc7fgCvPWIS85Ax3q9gVFf8ncETPchWF3jzOS20NJeesr5mC2zDALFhE03H870mfV8zmeo-260dc4OiL7zoJ8vdLB3OkGMQgSWw_Rsi3nU2Fu9SFq8n-QbOzZtlJ7sWwLzQ6d_PFS2Cxk3Ct-puisYcJg2MYtL4D3rz25XCWWe4WUMk2VO_c4B0Zo_eSMgq9eShtmXlS3jfzZjZ0MXr_C1JyprjcsEtyNBljAK5eJW52ovSPxrVsFvkVH9QqOpvPjdrNGlYEQgbxRhwX8gvWw-cbXwAoxVPUgjKVS7BMZE5OPT2XTQx-jHYH75sd9AtSAd6P1SX3XHtu1JSfX1JTOm3qFrgfWluVAesHEFi1GqCkSmeJPNRXXf2_NRNuOWd-DkC5DVlGsa5zCmknJ8lGW43B4vEyAgcYnHf2MDXdpdlW-Op0rzJV1eMQlmOJBuFUCxOcl7yT3_-xYOOppeAtyPkqzLVbBv6VTAmoW_fp9P_KeecR_8svk-cM5HzstseqGZpjwpb2qp6Ri_vUKhttRM3fdyG6WNMm6ijnV1ZIQsXGgCo3vVfyIYveIks_4c1IKFov6vMDNZaAqnfxI-trhLcMyjSB36_qFK2sRfqX2Ir3-BUNj8AcQSX9lTgAfx3hVfy9gaaQ"
-							}
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": "{{localhost}}/oauth/clients"
-					},
-					"response": []
-				},
-				{
-					"name": "createNewClient",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMDIyMDczZGJkOTJhYmZiOGEzM2ZlNjFlMTBlMGM5ZjMxMTBhZTYzYzc1OWI3ZWUwNDlmODUzZjkwNDRlNzg1NzAwMGMwYWRmYmZhNWYwNDIiLCJpYXQiOjE3MDc0MjA5MTIuOTQ5NzE1LCJuYmYiOjE3MDc0MjA5MTIuOTQ5NzE3LCJleHAiOjE3MzkwNDMzMTIuOTM1NzcxLCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.O9Lw3wN-G0o2oyQK5IUh60lSSY7Ar5uAG03Oc7fgCvPWIS85Ax3q9gVFf8ncETPchWF3jzOS20NJeesr5mC2zDALFhE03H870mfV8zmeo-260dc4OiL7zoJ8vdLB3OkGMQgSWw_Rsi3nU2Fu9SFq8n-QbOzZtlJ7sWwLzQ6d_PFS2Cxk3Ct-puisYcJg2MYtL4D3rz25XCWWe4WUMk2VO_c4B0Zo_eSMgq9eShtmXlS3jfzZjZ0MXr_C1JyprjcsEtyNBljAK5eJW52ovSPxrVsFvkVH9QqOpvPjdrNGlYEQgbxRhwX8gvWw-cbXwAoxVPUgjKVS7BMZE5OPT2XTQx-jHYH75sd9AtSAd6P1SX3XHtu1JSfX1JTOm3qFrgfWluVAesHEFi1GqCkSmeJPNRXXf2_NRNuOWd-DkC5DVlGsa5zCmknJ8lGW43B4vEyAgcYnHf2MDXdpdlW-Op0rzJV1eMQlmOJBuFUCxOcl7yT3_-xYOOppeAtyPkqzLVbBv6VTAmoW_fp9P_KeecR_8svk-cM5HzstseqGZpjwpb2qp6Ri_vUKhttRM3fdyG6WNMm6ijnV1ZIQsXGgCo3vVfyIYveIks_4c1IKFov6vMDNZaAqnfxI-trhLcMyjSB36_qFK2sRfqX2Ir3-BUNj8AcQSX9lTgAfx3hVfy9gaaQ"
-							}
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
 						},
 						"method": "POST",
 						"header": [
@@ -243,45 +250,61 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Salman 1\",\r\n    \"redirect\":\"http://localhost:8000/callback\"\r\n}",
+							"raw": "{\r\n    \"rss_feed_id\": {{rssFeedId}},\r\n    \"rss_feed_details\": [\r\n        {\r\n            \"title\": \"Test is going on 123\",\r\n            \"link\": \"https://test123.com\",\r\n            \"published_at\": \"2024-02-27 00:00:01\"\r\n        },\r\n        {\r\n            \"title\": \"Test is going on\",\r\n            \"link\": \"https://test1.com\",\r\n            \"published_at\": \"2024-02-18 00:00:01\"\r\n        },\r\n        {\r\n            \"title\": \"Test\",\r\n            \"link\": \"https://test12.com\",\r\n            \"published_at\": \"2024-02-18 00:00:01\"\r\n        },\r\n        {\r\n            \"title\": \"Test is going on\",\r\n            \"link\": \"https://test13.com\",\r\n            \"published_at\": \"2024-02-18 00:00:01\"\r\n        },\r\n        {\r\n            \"title\": \"Test is going on\",\r\n            \"link\": \"https://test14.com\",\r\n            \"published_at\": \"2024-02-18 00:00:01\"\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "{{localhost}}/oauth/clients"
+						"url": {
+							"raw": "{{localhost}}/api/private/rss-feed/re-fetch",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"private",
+								"rss-feed",
+								"re-fetch"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/api/private/rss-feed/list",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"private",
+								"rss-feed",
+								"list"
+							]
+						}
 					},
 					"response": []
 				}
 			]
-		},
-		{
-			"name": "initApi",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "oauth2",
-					"oauth2": {
-						"addTokenTo": "header"
-					}
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": "{{localhost}}"
-			},
-			"response": []
 		}
 	]
 }

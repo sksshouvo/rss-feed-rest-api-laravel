@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\RssFeed;
 
 use App\Http\Requests\RssFeedFormRequest;
+use App\Http\Resources\RssFeedCollection;
 use App\Http\Resources\RssFeedResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -21,9 +22,20 @@ class RssFeedController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function list(Request $request)
     {
-        return "index";
+        
+        try {
+            DB::beginTransaction();
+            $rssFeedList = $this->rss_feed->list();
+            DB::commit();
+            return successResponse($request->bearerToken(), new RssFeedResource($rssFeedList), __('rss_feed.list'), 201);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::emergency($e);
+            return errorResponse($e, __('common.error'), 500);
+        }
     }
 
     /**
@@ -54,7 +66,6 @@ class RssFeedController extends Controller
 
     }
 
-
     /**
      * Display the specified resource.
      */
@@ -77,12 +88,11 @@ class RssFeedController extends Controller
     public function stop(RssFeedFormRequest $request)
     {
         $request->validate($request->stop());
-        $rssFeedLink = $request->input('rss_feed_link', NULL);
         $sessionEndedAt = $request->input('session_ended_at', NULL);
 
         try {
             DB::beginTransaction();
-            $stoppedRssFeed = $this->rss_feed->stopFeed(rssFeedLink: $rssFeedLink, sessionEndedAt: $sessionEndedAt);
+            $stoppedRssFeed = $this->rss_feed->stopFeed(sessionEndedAt: $sessionEndedAt);
             DB::commit();
             Log::info($stoppedRssFeed);
             return successResponse($request->bearerToken(), new RssFeedResource($stoppedRssFeed), __('rss_feed.stopped'), 201);
@@ -92,5 +102,25 @@ class RssFeedController extends Controller
             Log::emergency($e);
             return errorResponse($e, __('common.error'), 500);
         }
+    }
+
+    public function refetch(RssFeedFormRequest $request) {
+        
+        $request->validate($request->refetch());
+        $rssFeedDetails = $request->input('rss_feed_details', []);
+
+        try {
+            DB::beginTransaction();
+            $this->rss_feed_detail->storeRssFeedDetail(rssFeedId: $request->rss_feed_id, rssFeedDetails: $rssFeedDetails);
+            $rssFeedList = $this->rss_feed->list();
+            DB::commit();
+            return successResponse($request->bearerToken(), new RssFeedResource($rssFeedList), __('rss_feed.store'), 201);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::emergency($e);
+            return errorResponse($e, __('common.error'), 500);
+        }
+
     }
 }
