@@ -27,21 +27,16 @@ class RssFeed extends Model
         );
     }
 
-    protected function SessionStartedAt(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value) => Carbon::parse($value)->diffForHumans(),
-        );
-    }
+    // protected function SessionStartedAt(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn (string $value) => Carbon::parse($value)->diffForHumans(),
+    //     );
+    // }
 
     public function storeFeed(string $rssFeedLink, int $refreshInterval, string $intervalType, string $sessionStartedAt) : mixed {
 
-        $rssFeed = $this::where(
-            [
-                ['rss_feed_link', $rssFeedLink],
-                ['created_by', Auth::id()]
-            ]
-        )->first();
+        $rssFeed = $this::userWiseFilter()->first();
         
         if (!$rssFeed) {
             $rssFeed = new $this;
@@ -55,9 +50,25 @@ class RssFeed extends Model
         return $rssFeed;
     }
 
+    
+    public function stopFeed(string $sessionEndedAt) : mixed {
+        $rssFeed = $this::userWiseFilter()->first();
+        $rssFeed->session_ended_at = $sessionEndedAt;
+        $rssFeed->save();
+        return $rssFeed;
+    }
+
+    public function list() {
+        return $this::userWiseFilter()->first();
+    }
+
     public function rssFeedDetails(): mixed
     {
         return $this->hasMany(RssFeedDetail::class);
+    }
+
+    public function scopeUserWiseFilter($query) : void {
+        $query->where("created_by", Auth::id());
     }
     
 }
