@@ -34,7 +34,7 @@ class RssFeed extends Model
     //     );
     // }
 
-    public function storeFeed(string $rssFeedLink, int $refreshInterval, string $intervalType, string $sessionStartedAt) : mixed {
+    public function storeFeed(string $rssFeedLink, int $refreshInterval, string $intervalType) : mixed {
 
         $rssFeed = $this::userWiseFilter()->first();
         
@@ -42,18 +42,19 @@ class RssFeed extends Model
             $rssFeed = new $this;
         }
 
-        $rssFeed->rss_feed_link = $rssFeedLink;
-        $rssFeed->refresh_interval = $refreshInterval;
-        $rssFeed->interval_type = $intervalType;
-        $rssFeed->session_started_at = $sessionStartedAt;
+        $rssFeed->rss_feed_link      = $rssFeedLink;
+        $rssFeed->refresh_interval   = $refreshInterval;
+        $rssFeed->interval_type      = $intervalType;
+        $rssFeed->session_started_at = now();
+        $rssFeed->session_ended_at   = NULL;
         $rssFeed->save();
         return $rssFeed;
     }
 
     
-    public function stopFeed(string $sessionEndedAt) : mixed {
+    public function stopFeed() : mixed {
         $rssFeed = $this::userWiseFilter()->first();
-        $rssFeed->session_ended_at = $sessionEndedAt;
+        $rssFeed->session_ended_at = now();
         $rssFeed->save();
         return $rssFeed;
     }

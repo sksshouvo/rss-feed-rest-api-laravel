@@ -48,12 +48,11 @@ class RssFeedController extends Controller
         $rssFeedLink      = $request->input('rss_feed_link', NULL);
         $refreshInterval  = $request->input('refresh_interval', NULL);
         $intervalType     = $request->input('interval_type', NULL);
-        $sessionStartedAt = $request->input('session_started_at', NULL);
         $rssFeedDetails   = $request->input('rss_feed_details', []);
 
         try {
             DB::beginTransaction();
-            $rssFeed = $this->rss_feed->storeFeed(rssFeedLink: $rssFeedLink, refreshInterval: $refreshInterval, intervalType: $intervalType, sessionStartedAt: $sessionStartedAt);
+            $rssFeed = $this->rss_feed->storeFeed(rssFeedLink: $rssFeedLink, refreshInterval: $refreshInterval, intervalType: $intervalType);
             $rssFeedDetail = $this->rss_feed_detail->storeRssFeedDetail(rssFeedId: $rssFeed->id, rssFeedDetails: $rssFeedDetails);
             DB::commit();
             return successResponse($request->bearerToken(), new RssFeedResource($rssFeed), __('rss_feed.store'), 201);
@@ -85,14 +84,11 @@ class RssFeedController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function stop(RssFeedFormRequest $request)
+    public function stop(Request $request)
     {
-        $request->validate($request->stop());
-        $sessionEndedAt = $request->input('session_ended_at', NULL);
-
         try {
             DB::beginTransaction();
-            $stoppedRssFeed = $this->rss_feed->stopFeed(sessionEndedAt: $sessionEndedAt);
+            $stoppedRssFeed = $this->rss_feed->stopFeed();
             DB::commit();
             Log::info($stoppedRssFeed);
             return successResponse($request->bearerToken(), new RssFeedResource($stoppedRssFeed), __('rss_feed.stopped'), 201);

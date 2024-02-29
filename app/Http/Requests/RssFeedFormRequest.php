@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\CheckLessOrEqualDateTime;
 use App\Enums\RssFeedIntervalType;
 use Illuminate\Validation\Rule;
 use App\Rules\ArrayCheck;
@@ -30,16 +31,11 @@ class RssFeedFormRequest extends FormRequest
             "rss_feed_link"                   => ["required", "url"],
             "refresh_interval"                => ["required", "numeric"],
             "interval_type"                   => ["required", Rule::enum(RssFeedIntervalType::class)],
-            "session_started_at"              => ["required", "date_format:Y-m-d H:i:s"],
             "rss_feed_details"                => ["required", "array", new ArrayCheck],
             "rss_feed_details.*.title"        => ["required", "string"],
             "rss_feed_details.*.link"         => [ "required", "url:http,https"],
             "rss_feed_details.*.published_at" => ["required", "date_format:Y-m-d H:i:s"]
         ];
-    }
-
-    public function stop() : array {
-        return ["session_ended_at" => ["required", "date_format:Y-m-d H:i:s"]];
     }
 
     public function refetch() : array {
